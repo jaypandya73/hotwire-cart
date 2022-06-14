@@ -1,0 +1,9 @@
+<tr id=<%= "id_#{item.id}" %> >
+  <th><%= item.id %></th>
+  <th><%= item.name %></th>
+  <th><%= form_for item, url: update_item_pc_path(id: item.id), html: { "data-controller" => "hello", "data-hello-url-value" => "#{cart_shipping_path(cart_id: 20)}" } do |form| %>
+    <%= form.number_field "qty", value: item.qty, "data-action" => "hello#updateQty", "data-id" => item.id %>
+  <% end %></th>
+  <th><%= item.price %></th>
+  <th><%= item.price * item.qty %></th>
+</tr>

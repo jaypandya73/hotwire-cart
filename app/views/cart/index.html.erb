@@ -1,0 +1,107 @@
+<!-- Button trigger modal -->
+<div class="container-fluid bg-dark">
+  <div class="row align-items-center">
+    <div class="col-md-12 text-center" data-controller="hello" >
+
+      <!-- <%= turbo_frame_tag "items" do %>
+        <%= button_to "Cart", fetch_items_path, method: :get, data: { bs_taget: "#cart", bs_toggle: 'modal' }, class: "btn btn-primary center" %>
+      <% end %> -->
+      <!-- <button type="button" class="btn btn-primary center" data-bs-toggle="modal" data-bs-target="#cart" data-action="hello#reloadFrame" >
+        Cart
+      </button> -->
+      <%= link_to "Cart", "javascript:void(0)", data: { target: "#cart", toggle: "modal", action: "hello#reloadFrame" }, class: 'btn btn-primary center' %>
+      <%= link_to "Players", players_path, class: 'btn btn-primary end' %>
+    </div>
+  </div>
+  
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="cart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs" id="myTab" role="tablist" data-controller="hello">
+          <li class="nav-item" role="presentation">
+            <!-- <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button> -->
+            <%= button_to "Products", fetch_items_path ,method: :get, data: {turbo_frame: "items", action: "hello#toogleTab", hello_target: "tabs"}, params: { tab: "items"}, class: 'nav-link modal-tabs'  %>
+          </li>
+          
+            <li class="nav-item" role="presentation" >
+              <!-- <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" data-action="showProfile">Profile</button> -->
+              <!-- <%= button_to "Profile", fetch_items_path(tab: "profile"), method: :get, params: {tab: "profile"}, data: {turbo_frame: "profile1"} %> -->
+              <%= button_to "Save later", fetch_items_path(tab: "profile"),method: :get, data: {turbo_frame: "items", action: "hello#toogleTab", hello_target: "tabs"}, params: { tab: "profile"}, class: 'nav-link modal-tabs'  %>
+              
+            </li>
+          
+          <li class="nav-item" role="presentation">
+            <!-- <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button> -->
+            <%= button_to "Add more", fetch_items_path ,method: :get, data: {turbo_frame: "items", action: "hello#toogleTab", hello_target: "tabs"}, params: { tab: "contact"}, class: 'nav-link modal-tabs'  %>
+          </li>
+        </ul>
+        <%= turbo_frame_tag "items", src: fetch_items_path, loading: "lazy", reloadable: "" do %>
+          Loadingnnnnnnnngggg.......
+        <% end %>
+
+      </div>
+      <div class="modal-footer" data-controller="hello">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-action="hello#reloadFrame">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div data-controller="product">
+  <%- @products.each do |product| %>
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title" data-action="click->product#openModal" data-product-id="<%= product.id %>" data-product-ndc="<%= product.ndc %>" >
+          <%= product.name %>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          <%= product.ndc %>
+        </h6>
+        <p class="card-text">
+          Lowest Price: <%= product.lowest_price %>
+        </p>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="<%= "product#{product.id}" %>" tabindex="-1" aria-labelledby="<%= "product#{product.id}" %>" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="<%= "product#{product.id}" %>" >Product "<%= product.name %>"</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="<%= "productNdc-#{product.id}" %>" data-bs-ndc="<%= product.ndc %>">
+              NDC: 
+            </div>
+            <ul class="nav nav-tabs" id="cartTab" role="tablist" data-controller="product">
+              <li class="nav-item" role="presentation">
+                <%= button_to "NABP", fetch_items_path(id: product.id), method: :get, data: {turbo_frame: "items"}, params: { tab: "nabp"}, class: 'nav-link modal-tabs'  %>
+              </li>
+            </ul>
+            <%= turbo_frame_tag "products", src: fetch_products_path(id: product.id), loading: "lazy" do %>
+              Loading products.......
+            <% end %>
+    
+          </div>
+          <div class="modal-footer" data-controller="hello">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+</div>

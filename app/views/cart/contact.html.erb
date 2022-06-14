@@ -1,0 +1,4 @@
+<%= turbo_frame_tag "items" do %>
+  <h4>Add more Tab</h4>
+  <%= button_to "Products", fetch_items_path ,method: :get, data: {turbo_frame: "items"}, params: { tab: "items", special_render: "yes" }, class: 'nav-link'  %>
+<% end %>

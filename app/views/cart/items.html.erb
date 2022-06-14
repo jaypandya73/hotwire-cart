@@ -1,0 +1,41 @@
+
+<%= turbo_frame_tag "items" do %>
+<h2>Home tab</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Price</th>
+      <th scope="col">Item total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- items.each do |item| %>
+      <!-- <%= turbo_frame_tag dom_id(item) do %> -->
+      <%= render partial: 'item_row', locals: { item: item } %>
+      <!-- <% end %> -->
+    <% end %>
+  </tbody>
+</table>
+<!-- <%- items.each do |item| %>
+  <%= turbo_frame_tag dom_id(item) do %>
+    <p><%= item.name %></p>
+    <p><%= item.qty %></p>
+    <p><%= item.price %></p>
+  <% end %>
+<% end %> -->
+  <% if params[:special_render].present? %>
+    <p> This is coming from anothe tab inside button just like add button from Add more tab </p>
+  <% end %>
+
+  <div id="shippingPart" data-controller="shipping" data-shipping-url-value=<%= "#{cart_shipping_path(cart_id: 20)}" %> >
+    "Loading......."
+  </div>
+
+  </div>
+<% end %>
+
+
